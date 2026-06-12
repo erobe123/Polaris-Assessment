@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Business Impact Assessment — Polaris Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dark:#333632;--dark2:#2a2c29;--dark3:#1e201d;
+  --gold:#f6b800;--gold-h:#e0a900;--gold-faint:rgba(246,184,0,.08);
+  --orange:#fb8500;
+  --warm:#e7e3dd;--warm2:#f2efea;--warm3:#faf8f5;
+  --white:#fff;--text:#1e201d;--text2:#4a4d47;--text3:#767972;
+  --bd:#d4d0ca;--bd2:#b8b4ae;
+  --teal:#0a7c65;--teal-f:#e0f5f0;--teal-b:#9FE1CB;
+  --amber:#9a6200;--amber-f:#fff3cc;--amber-b:#FAC775;
+  --red:#c0392b;--red-f:#fdecea;--red-b:#F7C1C1;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --serif:'Instrument Serif','Georgia',serif;
+}
+html,body{height:100%;background:var(--warm);font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* ── PAGE SHELLS ──────────────────────────────────────────────────────── */
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* ══ FORM PAGE ══════════════════════════════════════════════════════════ */
+.form-page{padding:32px 20px 60px}
+.wrap{max-width:640px;margin:0 auto}
+.cover-header{background:var(--dark);border-radius:12px;padding:26px 26px 22px;margin-bottom:14px;border-bottom:3px solid var(--gold)}
+.cover-eye{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--gold);margin-bottom:8px;text-transform:uppercase}
+.cover-h1{font-size:26px;color:var(--warm);line-height:1.15;margin-bottom:6px;font-family:var(--serif)}
+.cover-sub{font-size:13px;color:var(--text3);line-height:1.55}
+.cover-pills{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.pill{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}
+.pill-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.sc{background:var(--white);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;margin-bottom:10px}
+.sh{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--bd)}
+.fl{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.req{color:var(--red);margin-left:2px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.fi{display:flex;flex-direction:column;gap:3px}
+input[type=text],select{width:100%;background:var(--warm3);border:1px solid var(--bd);border-radius:6px;color:var(--text);font-size:13px;padding:7px 10px;outline:none;transition:border-color .15s;font-family:var(--sans)}
+input[type=text]:focus,select:focus{border-color:var(--bd2)}
+input[type=text]::placeholder{color:var(--text3)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23767972' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;cursor:pointer}
+.other-reveal{margin-top:6px;display:none}
+.other-reveal.show{display:block}
+.sys-cols{display:grid;grid-template-columns:110px minmax(120px,1fr) minmax(140px,1fr);gap:8px;margin-bottom:6px}
+.sys-col-label{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text3)}
+.sys-row-wrap{border-bottom:1px solid var(--bd)}
+.sys-row{display:grid;grid-template-columns:110px minmax(120px,1fr) minmax(140px,1fr);gap:8px;align-items:start;padding:10px 0}
+.sys-fn{font-size:12px;font-weight:500;color:var(--text);padding-top:6px}
+.sys-other{padding:4px 0 8px 118px;display:none}
+.sys-other.show{display:block}
+.tick-row{display:flex;gap:4px;flex-wrap:wrap}
+.tick-btn{padding:3px 7px;font-size:10px;font-weight:500;border-radius:4px;border:1px solid var(--bd);background:var(--warm3);color:var(--text3);transition:all .12s;cursor:pointer}
+.tick-btn.sel-working{background:var(--teal-f);color:var(--teal);border-color:var(--teal-b)}
+.tick-btn.sel-partial{background:var(--amber-f);color:var(--amber);border-color:var(--amber-b)}
+.tick-btn.sel-none{background:var(--red-f);color:var(--red);border-color:var(--red-b)}
+.radio-group{display:flex;flex-direction:column;gap:7px}
+.radio-item{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
+.radio-circle{width:14px;height:14px;border-radius:50%;border:2px solid var(--bd);flex-shrink:0;margin-top:2px;transition:all .12s;display:flex;align-items:center;justify-content:center}
+.radio-item.sel .radio-circle{border-color:var(--gold);background:var(--gold)}
+.radio-dot{width:5px;height:5px;border-radius:50%;background:var(--dark);display:none}
+.radio-item.sel .radio-dot{display:block}
+.radio-label{font-size:12px;color:var(--text2);line-height:1.4}
+.radio-item.sel .radio-label{color:var(--text)}
+.req-note{font-size:11px;color:var(--text3);margin-bottom:10px}
+.sub-btn{width:100%;padding:13px 24px;font-size:14px;font-weight:600;background:var(--bd);color:var(--text3);border:none;border-radius:8px;transition:all .15s;letter-spacing:.01em;cursor:not-allowed}
+.sub-btn.ready{background:var(--gold);color:var(--dark);box-shadow:0 2px 12px rgba(246,184,0,.35);cursor:pointer}
+.sub-btn.ready:hover{background:var(--gold-h)}
+.sub-hint{font-size:11px;color:var(--text3);text-align:center;margin-top:8px}
+@media(max-width:580px){
+  .r2{grid-template-columns:1fr}
+  .sys-cols{display:none}
+  .sys-row{grid-template-columns:1fr;gap:6px}
+  .sys-fn{padding-top:0}
+  .sys-other{padding-left:0}
+}
+
+/* ══ QUESTIONS PAGE ══════════════════════════════════════════════════════ */
+.q-page{min-height:100vh;display:none;flex-direction:column}
+.q-page.active{display:flex}
+
+/* Top bar */
+.q-topbar{background:var(--dark);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:2px solid var(--gold)}
+.q-brand{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+.q-progress-wrap{display:flex;align-items:center;gap:10px}
+.q-progress-bar{width:120px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden}
+.q-progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease}
+.q-progress-label{font-size:11px;color:var(--text3)}
+
+/* Main question area */
+.q-main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.q-card{max-width:600px;width:100%}
+.q-num{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--gold);margin-bottom:12px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.q-num-line{flex:1;height:1px;background:var(--gold-faint)}
+.q-question{font-family:var(--serif);font-size:28px;color:var(--dark);line-height:1.25;margin-bottom:8px}
+.q-context{font-size:13px;color:var(--text3);line-height:1.55;margin-bottom:24px}
+.q-textarea{width:100%;background:var(--white);border:2px solid var(--bd);border-radius:10px;color:var(--text);font-size:15px;padding:14px 16px;outline:none;font-family:var(--sans);line-height:1.6;resize:none;transition:border-color .2s;min-height:110px}
+.q-textarea:focus{border-color:var(--gold)}
+.q-textarea::placeholder{color:var(--text3)}
+
+/* Follow-up nudge */
+.q-nudge{display:none;background:var(--amber-f);border:1px solid var(--amber-b);border-radius:8px;padding:12px 14px;margin-top:10px}
+.q-nudge.show{display:block}
+.q-nudge-title{font-size:11px;font-weight:600;color:var(--amber);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.q-nudge-example{font-size:12px;color:var(--text2);line-height:1.55;margin-bottom:6px}
+.q-nudge-example em{font-style:italic;color:var(--amber)}
+.q-nudge-missing{font-size:11px;color:var(--amber)}
+
+/* Action row */
+.q-actions{display:flex;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+.q-next-btn{padding:11px 28px;font-size:14px;font-weight:600;background:var(--dark);color:var(--warm);border:none;border-radius:8px;cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.q-next-btn:hover{background:var(--dark2)}
+.q-next-btn:disabled{background:var(--bd);color:var(--text3);cursor:not-allowed}
+.q-skip{font-size:12px;color:var(--text3);cursor:pointer;padding:4px 0;border:none;background:none;font-family:var(--sans)}
+.q-skip:hover{color:var(--text2)}
+.q-back{font-size:12px;color:var(--text3);cursor:pointer;padding:4px 0;border:none;background:none;font-family:var(--sans);margin-left:auto}
+.q-back:hover{color:var(--text2)}
+.q-key-hint{font-size:11px;color:var(--text3);margin-top:8px}
+.q-key-hint kbd{background:var(--warm2);border:1px solid var(--bd);border-radius:3px;padding:1px 5px;font-size:10px;font-family:var(--sans)}
+
+/* ══ COMPLETE PAGE ═══════════════════════════════════════════════════════ */
+.done-page{min-height:100vh;display:none;align-items:center;justify-content:center;padding:40px 24px;background:var(--warm)}
+.done-page.active{display:flex}
+.done-card{max-width:520px;width:100%;text-align:center}
+.done-icon{width:60px;height:60px;border-radius:50%;background:var(--gold-faint);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.done-h1{font-family:var(--serif);font-size:28px;color:var(--dark);margin-bottom:10px}
+.done-sub{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:28px}
+.done-book{background:var(--dark);border-radius:12px;padding:20px 24px;border-bottom:2px solid var(--gold);margin-bottom:20px}
+.done-book-eye{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--gold);margin-bottom:4px;text-transform:uppercase}
+.done-book-title{font-family:var(--serif);font-size:20px;color:var(--warm);margin-bottom:4px}
+.done-book-sub{font-size:12px;color:var(--text3)}
+.done-book-body{padding:16px;background:var(--warm3);border-radius:0 0 10px 10px;border:1px solid var(--bd);border-top:none}
+.done-book-placeholder{background:var(--white);border:1px solid var(--bd);border-radius:6px;padding:14px;text-align:center;font-size:12px;color:var(--text3)}
+</style>
+</head>
+<body>
+
+<!-- ══ PAGE 1: FORM ════════════════════════════════════════════════════════ -->
+<div id="page-form" class="page active">
+<div class="form-page">
+<div class="wrap">
+
+  <div class="cover-header">
+    <div class="cover-eye">Polaris Digital</div>
+    <h1 class="cover-h1">AI Business Impact<br>&amp; Readiness Assessment</h1>
+    <div class="cover-sub">Takes about 7 minutes. Your answers personalise the questions that follow — so they feel specific to your business, not generic.</div>
+    <div class="cover-pills">
+      <div class="pill"><div class="pill-dot"></div>Free</div>
+      <div class="pill"><div class="pill-dot"></div>No obligation</div>
+      <div class="pill"><div class="pill-dot"></div>~7 minutes total</div>
+    </div>
+  </div>
+
+  <!-- Section 1: Business -->
+  <div class="sc">
+    <div class="sh">Your business</div>
+    <div class="r2">
+      <div class="fi"><div class="fl">Your name <span class="req">*</span></div>
+        <input type="text" id="f-name" placeholder="Sarah Chen"></div>
+      <div class="fi"><div class="fl">Business name <span class="req">*</span></div>
+        <input type="text" id="f-business" placeholder="Apex Bookkeeping"></div>
+    </div>
+    <div class="r2">
+      <div class="fi"><div class="fl">Industry / vertical <span class="req">*</span></div>
+        <select id="f-vertical" onchange="onVerticalChange(this)">
+          <option value="">Select…</option>
+          <option>Finance &amp; accounting</option>
+          <option>Technology / MSP</option>
+          <option>Marketing &amp; creative</option>
+          <option>Legal services</option>
+          <option>Business services / HR</option>
+          <option>Management consulting</option>
+          <option>Other professional services</option>
+        </select>
+        <div class="other-reveal" id="vertical-other-wrap">
+          <input type="text" id="f-vertical-other" placeholder="Please describe your industry…" oninput="updateSubmit()">
+        </div>
+      </div>
+      <div class="fi"><div class="fl">Team size</div>
+        <select id="f-teamsize">
+          <option value="">Select…</option>
+          <option>Just me</option><option>2–5 people</option>
+          <option>6–15 people</option><option>16–50 people</option><option>50+ people</option>
+        </select>
+      </div>
+    </div>
+    <div class="r2">
+      <div class="fi"><div class="fl">Annual revenue <span class="req">*</span></div>
+        <select id="f-revenue" onchange="updateSubmit()">
+          <option value="">Select…</option>
+          <option>Under $500k</option><option>$500k – $1m</option>
+          <option>$1m – $3m</option><option>$3m – $8m</option><option>$8m+</option>
+        </select>
+      </div>
+      <div class="fi"><div class="fl">Revenue model <span class="req">*</span></div>
+        <select id="f-revmodel" onchange="updateSubmit()">
+          <option value="">Select…</option>
+          <option>Mostly recurring / retainer</option>
+          <option>Mix of recurring and project</option>
+          <option>Mostly project-based</option>
+          <option>Mostly transactional / one-off</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Systems -->
+  <div class="sc">
+    <div class="sh">Core systems</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">For each function, select the tool in use and how it's working.</div>
+    <div class="sys-cols">
+      <div></div>
+      <div class="sys-col-label">Tool in use</div>
+      <div class="sys-col-label">How's it working?</div>
+    </div>
+    <div id="sys-rows"></div>
+  </div>
+
+  <!-- Section 3: Performance -->
+  <div class="sc">
+    <div class="sh">Performance visibility</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:10px">Financial</div>
+        <div class="radio-group" id="perf-financial">
+          <div class="radio-item" onclick="selRadio('perf-financial',this)"><div class="radio-circle"><div class="radio-dot"></div></div><div class="radio-label">Clear — revenue, margin, cashflow visible</div></div>
+          <div class="radio-item" onclick="selRadio('perf-financial',this)"><div class="radio-circle"><div class="radio-dot"></div></div><div class="radio-label">Check occasionally but not regularly</div></div>
+          <div class="radio-item" onclick="selRadio('perf-financial',this)"><div class="radio-circle"><div class="radio-dot"></div></div><div class="radio-label">Rough feel — no real numbers</div></div>
+          <div class="radio-item" onclick="selRadio('perf-financial',this)"><div class="radio-circle"><div class="radio-dot"></div></div><div class="radio-label">No visibility</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:10px">Pipeline &amp; customers</div>
+        <div class="radio-group" id="perf-pipeline">
+          <div class="radio-item" onclick="selRadio('perf-pipeline',this)"><div class="radio-circle"><div class="radio-dot"></div></div><div class="radio-label">Clear — pipeline and client health tracked</div></div>
+          <div class="radio-item" onclick="selRadio('perf-pipeline',this)"><div class="radio-circle"><div class="radio-dot"></div></div><div class="radio-label">Know clients, pipeline is informal</div></div>
+          <div class="radio-item" onclick="selRadio('perf-pipeline',this)"><div class="radio-circle"><div class="radio-dot"></div></div><div class="radio-label">Mostly in my head — nothing tracked</div></div>
+          <div class="radio-item" onclick="selRadio('perf-pipeline',this)"><div class="radio-circle"><div class="radio-dot"></div></div><div class="radio-label">No visibility</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:14px;padding-top:10px;border-top:1px solid var(--bd)">Your email and website are collected when you book a call — not here.</div>
+  </div>
+
+  <div class="req-note"><span style="color:var(--red)">*</span> Required fields</div>
+  <button class="sub-btn" id="sub-btn" onclick="startQuestions()">Continue to assessment →</button>
+  <div class="sub-hint">Free · No obligation · ~7 minutes total</div>
+
+</div>
+</div>
+</div>
+
+<!-- ══ PAGE 2: QUESTIONS ════════════════════════════════════════════════════ -->
+<div id="page-questions" class="page q-page">
+  <div class="q-topbar">
+    <div class="q-brand">Polaris Digital</div>
+    <div class="q-progress-wrap">
+      <div class="q-progress-bar"><div class="q-progress-fill" id="q-progress-fill"></div></div>
+      <div class="q-progress-label" id="q-progress-label">1 of 4</div>
+    </div>
+  </div>
+  <div class="q-main">
+    <div class="q-card">
+      <div class="q-num"><span id="q-num-text">Question 1</span><div class="q-num-line"></div></div>
+      <div class="q-question" id="q-question"></div>
+      <div class="q-context" id="q-context"></div>
+      <textarea class="q-textarea" id="q-answer" rows="4" placeholder="Type your answer here…" oninput="onAnswerInput()"></textarea>
+      <div class="q-nudge" id="q-nudge">
+        <div class="q-nudge-title">A little more would help</div>
+        <div class="q-nudge-example" id="q-nudge-example"></div>
+        <div class="q-nudge-missing" id="q-nudge-missing"></div>
+      </div>
+      <div class="q-actions">
+        <button class="q-next-btn" id="q-next-btn" onclick="nextQuestion()" disabled>Next →</button>
+        <button class="q-skip" onclick="skipQuestion()">Skip this question</button>
+        <button class="q-back" onclick="prevQuestion()">← Back</button>
+      </div>
+      <div class="q-key-hint">Press <kbd>Enter</kbd> to continue, <kbd>Shift+Enter</kbd> for new line</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 3: COMPLETE ════════════════════════════════════════════════════ -->
+<div id="page-done" class="page done-page">
+  <div class="done-card">
+    <div class="done-icon">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+        <path d="M5 13.5l6 6L21 7" stroke="#f6b800" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1 class="done-h1">Assessment complete, <span id="done-name"></span></h1>
+    <div class="done-sub">Ed reviews every assessment personally before the call. He'll have read your answers and come prepared to talk specifically about <strong id="done-biz"></strong> — not a generic AI pitch.<br><br>Book a 30-minute call below. You'll leave with a clear view of what to do and in what order.</div>
+    <div class="done-book">
+      <div class="done-book-eye">Next step</div>
+      <div class="done-book-title">Book your findings call</div>
+      <div class="done-book-sub">30 minutes · Ed reviews your answers beforehand</div>
+    </div>
+    <div class="done-book-body">
+      <div class="done-book-placeholder">
+        <!-- Replace with your Cal.com embed snippet e.g.:
+          <script type="text/javascript">
+            Cal("init", {origin:"https://cal.com"});
+          </script>
+          <div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline"></div>
+          <script type="text/javascript">
+            Cal("inline", {elementOrSelector:"#my-cal-inline", calLink: "your-username/ai-impact-call"});
+          </script>
+        -->
+        Cal.com booking widget — paste your embed snippet here
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const MAKE_WEBHOOK_URL = "" // paste your Make webhook URL here when ready
+
+// ── Systems setup ────────────────────────────────────────────────────────────
+const SYS_DEFS = [
+  { key:'finance',   label:'Finance',       tools:['Xero','QuickBooks','MYOB','FreshBooks','Spreadsheets only','None','Other'] },
+  { key:'crm',       label:'CRM / sales',   tools:['HubSpot','Pipedrive','Salesforce','Spreadsheets only','None','Other'] },
+  { key:'delivery',  label:'Delivery / PM', tools:['Asana','ClickUp','Monday.com','Notion','Trello','None','Other'] },
+  { key:'knowledge', label:'Knowledge mgmt',tools:['Notion','Confluence','Google Drive','SharePoint','None','Other'] },
+  { key:'marketing', label:'Marketing',     tools:['Mailchimp','ActiveCampaign','HubSpot','None','Other'] },
+]
+function buildSysRows() {
+  const container = document.getElementById('sys-rows')
+  SYS_DEFS.forEach(function(def, idx) {
+    const isLast = idx === SYS_DEFS.length - 1
+    const wrap = document.createElement('div')
+    wrap.className = 'sys-row-wrap'
+    if (isLast) wrap.style.borderBottom = 'none'
+    // Row
+    const row = document.createElement('div')
+    row.className = 'sys-row'
+    // Label
+    const fn = document.createElement('div')
+    fn.className = 'sys-fn'
+    fn.textContent = def.label
+    // Select
+    const sel = document.createElement('select')
+    sel.id = 'sys-' + def.key + '-tool'
+    const blank = document.createElement('option')
+    blank.value = ''; blank.textContent = 'Select tool…'
+    sel.appendChild(blank)
+    def.tools.forEach(function(t){ const o = document.createElement('option'); o.textContent = t; sel.appendChild(o) })
+    sel.onchange = function() {
+      const otherEl = document.getElementById('sys-' + def.key + '-other')
+      otherEl.classList.toggle('show', sel.value === 'Other')
+    }
+    // Ticks
+    const tickRow = document.createElement('div')
+    tickRow.className = 'tick-row'
+    tickRow.dataset.sys = def.key
+    ;[{val:'working',label:'Works well'},{val:'partial',label:'Partial'},{val:'none',label:'Not set'}].forEach(function(o) {
+      const btn = document.createElement('button')
+      btn.type = 'button'; btn.className = 'tick-btn'
+      btn.dataset.val = o.val; btn.textContent = o.label
+      btn.onclick = function() {
+        tickRow.querySelectorAll('.tick-btn').forEach(function(b){ b.className = 'tick-btn' })
+        btn.className = 'tick-btn sel-' + o.val
+      }
+      tickRow.appendChild(btn)
+    })
+    row.appendChild(fn); row.appendChild(sel); row.appendChild(tickRow)
+    // Other input
+    const otherDiv = document.createElement('div')
+    otherDiv.className = 'sys-other'; otherDiv.id = 'sys-' + def.key + '-other'
+    const otherInput = document.createElement('input')
+    otherInput.type = 'text'; otherInput.placeholder = 'Enter tool name…'
+    otherDiv.appendChild(otherInput)
+    wrap.appendChild(row); wrap.appendChild(otherDiv)
+    container.appendChild(wrap)
+  })
+}
+
+// ── Form helpers ──────────────────────────────────────────────────────────────
+function onVerticalChange(sel) {
+  document.getElementById('vertical-other-wrap').classList.toggle('show', sel.value === 'Other professional services')
+  updateSubmit()
+}
+function selRadio(groupId, item) {
+  document.querySelectorAll('#' + groupId + ' .radio-item').forEach(function(i){ i.classList.remove('sel') })
+  item.classList.add('sel')
+  updateSubmit()
+}
+function getRadioVal(groupId) {
+  var el = document.querySelector('#' + groupId + ' .radio-item.sel .radio-label')
+  return el ? el.textContent : ''
+}
+function updateSubmit() {
+  var name = document.getElementById('f-name').value.trim()
+  var biz  = document.getElementById('f-business').value.trim()
+  var vert = document.getElementById('f-vertical').value
+  var vOth = document.getElementById('f-vertical-other').value.trim()
+  var rev  = document.getElementById('f-revenue').value
+  var mod  = document.getElementById('f-revmodel').value
+  var vOk  = vert && (vert !== 'Other professional services' || vOth)
+  var ok   = name && biz && vOk && rev && mod
+  var btn  = document.getElementById('sub-btn')
+  btn.className = ok ? 'sub-btn ready' : 'sub-btn'
+}
+;['f-name','f-business'].forEach(function(id){
+  document.getElementById(id).addEventListener('input', updateSubmit)
+})
+
+// ── Collect intake data ───────────────────────────────────────────────────────
+function collectIntake() {
+  var vert   = document.getElementById('f-vertical').value
+  var vOther = document.getElementById('f-vertical-other').value.trim()
+  var sys = {}
+  SYS_DEFS.forEach(function(def) {
+    var toolEl  = document.getElementById('sys-' + def.key + '-tool')
+    var tool    = toolEl ? toolEl.value : ''
+    var otherEl = document.querySelector('#sys-' + def.key + '-other input')
+    var tName   = tool === 'Other' ? (otherEl && otherEl.value ? otherEl.value : 'Other') : tool
+    var tick    = document.querySelector('.tick-row[data-sys="' + def.key + '"] .tick-btn[class*="sel-"]')
+    var status  = tick ? tick.dataset.val : 'not rated'
+    sys[def.key] = tName && tName !== 'None' ? tName + ' (' + status + ')' : 'not in place'
+  })
+  return {
+    name:        document.getElementById('f-name').value.trim(),
+    business:    document.getElementById('f-business').value.trim(),
+    vertical:    vert === 'Other professional services' && vOther ? 'Other: ' + vOther : vert,
+    revenue:     document.getElementById('f-revenue').value,
+    revenueModel:document.getElementById('f-revmodel').value,
+    teamSize:    document.getElementById('f-teamsize').value,
+    systems:     sys,
+    perf: {
+      financial: getRadioVal('perf-financial') || 'not specified',
+      pipeline:  getRadioVal('perf-pipeline')  || 'not specified',
+    }
+  }
+}
+
+// ── Question definitions ──────────────────────────────────────────────────────
+// Each question can be a function(intake) → string, or a plain string.
+// nudge: { example, missing } — shown when answer < 10 words
+var QUESTIONS = [
+  {
+    id: 'services',
+    question: function(d) {
+      var vMap = {
+        'Finance & accounting':    'bookkeeping and accounting',
+        'Technology / MSP':        'technology and managed services',
+        'Marketing & creative':    'marketing and creative services',
+        'Legal services':          'legal services',
+        'Business services / HR':  'HR and business services',
+        'Management consulting':   'consulting and advisory work',
+      }
+      var vDesc = vMap[d.vertical] || 'professional services'
+      return 'Walk me through what ' + d.business + ' actually bills for today.'
+    },
+    context: function(d) {
+      var cMap = {
+        'Finance & accounting':    'For example: BAS and compliance, monthly bookkeeping, payroll, tax planning. Even rough percentages help — e.g. "60% compliance, 30% bookkeeping, 10% advisory."',
+        'Technology / MSP':        'For example: managed services, project work, licensing, consulting. Even rough splits help — e.g. "70% recurring managed services, 30% project-based."',
+        'Marketing & creative':    'For example: retainer work, campaign delivery, strategy, content production. Even rough splits help — e.g. "50% retainer clients, 50% project campaigns."',
+        'Legal services':          'For example: document drafting, advisory, conveyancing, dispute work. Even rough percentages help — e.g. "40% contracts, 40% advisory, 20% dispute."',
+        'Business services / HR':  'For example: recruitment, HR advisory, training, consulting. Even rough splits help — e.g. "60% recruitment, 40% HR consulting."',
+        'Management consulting':   'For example: strategy engagements, advisory retainers, workshops, implementation. Even rough splits help — e.g. "70% project work, 30% retainer advisory."',
+      }
+      return cMap[d.vertical] || 'List your main service lines and roughly what percentage of revenue each generates. Ballpark is fine.'
+    },
+    nudge: function(d) {
+      var exMap = {
+        'Finance & accounting':    '"BAS and compliance is about 60% of our revenue, monthly bookkeeping another 25%, and the rest is payroll and a bit of ad hoc advisory."',
+        'Technology / MSP':        '"Managed services contracts are about 70% of revenue, then project work for things like new setups or migrations, and some software licensing."',
+        'Marketing & creative':    '"About half is ongoing retainer clients — social and email. The rest is campaign projects, mostly for small business clients."',
+        'Legal services':          '"Mostly contract drafting and review — probably 50%. Then employment law advisory for a few retained clients, and some conveyancing."',
+        'Business services / HR':  '"Mainly recruitment — permanent placements make up about 70%. The rest is HR advisory for a couple of retained clients."',
+        'Management consulting':   '"Strategy engagements are the biggest part — probably 60%. Then I have two advisory retainers and run workshops a few times a year."',
+      }
+      var ex = exMap[d.vertical] || '"Our main revenue comes from [service A] — probably 60%. Then [service B] makes up another 30%, and the rest is [service C]."'
+      return {
+        example: 'A useful answer might look like: ' + ex,
+        missing: 'Try to include: the main 2–3 services and roughly what share of revenue each generates.'
+      }
+    }
+  },
+  {
+    id: 'value',
+    question: function(d) {
+      return 'If one of your best clients was recommending ' + d.business + ' to a colleague, what would they say you actually do for them?'
+    },
+    context: function(d) {
+      return 'Not your job title or service list — the actual difference you make. What would they say they\'d lose if you weren\'t there?'
+    },
+    nudge: function(d) {
+      var exMap = {
+        'Finance & accounting':    '"She keeps us out of trouble with the ATO and stops us getting surprised by tax bills. We just don\'t have to think about it."',
+        'Technology / MSP':        '"They make our systems just work. We don\'t deal with IT problems anymore — they handle everything and we know we\'re protected."',
+        'Marketing & creative':    '"They make us look credible online and bring in leads consistently. Without them our pipeline would dry up."',
+        'Legal services':          '"He spots the risks we\'d never see ourselves and explains it in plain English. We don\'t sign anything important without running it past him."',
+        'Business services / HR':  '"They find us good people quickly and handle the process so we don\'t have to. It\'s one less thing to worry about."',
+        'Management consulting':   '"She helps us think through the big decisions clearly. We leave every session knowing exactly what we\'re going to do and why."',
+      }
+      var ex = exMap[d.vertical] || '"They [specific outcome or feeling]. Without them, we\'d [what would be missing]."'
+      return {
+        example: 'A strong answer sounds like: ' + ex,
+        missing: 'Try to describe the outcome or feeling, not the task. What would the client actually miss?'
+      }
+    }
+  },
+  {
+    id: 'advisory',
+    question: function(d) {
+      var vMap = {
+        'Finance & accounting':    'Is there advisory or planning work you do for clients that isn\'t formally packaged or priced as a separate service?',
+        'Technology / MSP':        'Is there strategic or consulting work you do for clients that goes beyond the standard managed services — but isn\'t separately scoped or charged?',
+        'Marketing & creative':    'Is there strategy, brand thinking, or consultative work you do that clients value — but you\'re currently bundling in or not charging properly for?',
+        'Legal services':          'Is there advisory or strategic guidance you provide that goes beyond the specific legal matter — but isn\'t billed as a separate service?',
+        'Business services / HR':  'Is there coaching, advisory, or consultative support you provide that clients genuinely value — but isn\'t packaged as a distinct offer?',
+        'Management consulting':   'Is there ongoing advisory, implementation support, or follow-through work you do after an engagement that clients appreciate — but you\'re not consistently charging for?',
+      }
+      return vMap[d.vertical] || 'Is there higher-value work you do informally that clients appreciate but you\'re not fully charging for?'
+    },
+    context: function(d) {
+      return 'Most businesses have this — work that\'s bundled in, done out of goodwill, or never been turned into a proper offer. Think about the last time a client said "I don\'t know what I\'d do without you" — what had you just done?'
+    },
+    nudge: function(d) {
+      var exMap = {
+        'Finance & accounting':    '"I do a lot of year-end tax planning conversations with clients — helping them structure things before June 30. It takes 2–3 hours per client but it\'s just bundled into the monthly fee."',
+        'Technology / MSP':        '"We often end up advising clients on what technology to invest in next — vendor selection, roadmap planning. It\'s not in our managed services scope but we do it anyway."',
+        'Marketing & creative':    '"We end up doing a lot of brand and positioning thinking with clients, especially new ones. It\'s not in the brief but it shapes everything we produce."',
+        'Legal services':          '"Clients often ring me to talk through a business decision before it becomes a legal matter. It\'s useful for them but I\'m not billing it."',
+        'Business services / HR':  '"We often coach hiring managers through the process — how to interview, what to look for. That\'s not part of the recruitment fee."',
+        'Management consulting':   '"I stay in contact with clients after engagements and often end up helping them implement. It\'s relationship-based but it\'s not charged."',
+      }
+      var ex = exMap[d.vertical] || '"We often do [type of work] for clients — it\'s valuable but we\'ve never packaged or priced it properly."'
+      return {
+        example: 'An honest answer might look like: ' + ex,
+        missing: 'Try to describe a specific type of work — what do you do, and roughly how often or how long does it take?'
+      }
+    }
+  },
+  {
+    id: 'constraint',
+    question: function(d) {
+      return 'If ' + d.business + ' was growing the way you actually want it to — better clients, better margins, less of the work you don\'t enjoy — what\'s the single biggest thing standing in the way right now?'
+    },
+    context: function(d) {
+      return 'Be honest — there\'s no wrong answer here. It might be time, systems, direction, pricing, team, or something else entirely.'
+    },
+    nudge: function(d) {
+      return {
+        example: 'Strong answers are specific: "Everything runs through me — there\'s no process so I can\'t delegate." or "I\'m 100% referral-dependent and have no real control over when or whether new work comes in." or "I know I need to charge more but I don\'t know how to reposition without losing clients."',
+        missing: 'Try to be specific — what is the one thing, and why is it the constraint?'
+      }
+    }
+  }
+]
+
+// ── Question engine ────────────────────────────────────────────────────────────
+var intake = null
+var answers = {}
+var currentQ = 0
+
+function startQuestions() {
+  var name = document.getElementById('f-name').value.trim()
+  var biz  = document.getElementById('f-business').value.trim()
+  var vert = document.getElementById('f-vertical').value
+  var rev  = document.getElementById('f-revenue').value
+  var mod  = document.getElementById('f-revmodel').value
+  var vOth = document.getElementById('f-vertical-other').value.trim()
+  var vOk  = vert && (vert !== 'Other professional services' || vOth)
+  if (!name || !biz || !vOk || !rev || !mod) return
+  intake = collectIntake()
+  // Post intake to Make in background
+  if (MAKE_WEBHOOK_URL) {
+    fetch(MAKE_WEBHOOK_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stage:'intake',data:intake})}).catch(function(){})
+  }
+  answers = {}
+  currentQ = 0
+  document.getElementById('page-form').classList.remove('active')
+  document.getElementById('page-questions').classList.add('active')
+  window.scrollTo(0,0)
+  renderQuestion()
+}
+
+function renderQuestion() {
+  var q = QUESTIONS[currentQ]
+  var total = QUESTIONS.length
+  // Progress
+  var pct = Math.round((currentQ / total) * 100)
+  document.getElementById('q-progress-fill').style.width = pct + '%'
+  document.getElementById('q-progress-label').textContent = (currentQ + 1) + ' of ' + total
+  document.getElementById('q-num-text').textContent = 'Question ' + (currentQ + 1)
+  // Question text
+  var qText  = typeof q.question === 'function' ? q.question(intake) : q.question
+  var qCtx   = typeof q.context  === 'function' ? q.context(intake)  : q.context
+  document.getElementById('q-question').textContent = qText
+  document.getElementById('q-context').textContent  = qCtx
+  // Restore previous answer if navigating back
+  document.getElementById('q-answer').value = answers[q.id] || ''
+  document.getElementById('q-nudge').classList.remove('show')
+  updateNextBtn()
+  document.getElementById('q-answer').focus()
+}
+
+function wordCount(str) {
+  return str.trim().split(/\s+/).filter(function(w){ return w.length > 0 }).length
+}
+
+function onAnswerInput() {
+  var val = document.getElementById('q-answer').value.trim()
+  updateNextBtn()
+  // Hide nudge while they're typing more
+  if (wordCount(val) >= 10) {
+    document.getElementById('q-nudge').classList.remove('show')
+  }
+}
+
+function updateNextBtn() {
+  var val = document.getElementById('q-answer').value.trim()
+  document.getElementById('q-next-btn').disabled = val.length < 3
+}
+
+function nextQuestion() {
+  var val = document.getElementById('q-answer').value.trim()
+  if (val.length < 3) return
+  var q = QUESTIONS[currentQ]
+  var wc = wordCount(val)
+  // Show nudge if under 10 words and nudge not already shown
+  var nudge = document.getElementById('q-nudge')
+  if (wc < 10 && !nudge.classList.contains('show')) {
+    var nudgeDef = typeof q.nudge === 'function' ? q.nudge(intake) : q.nudge
+    if (nudgeDef) {
+      document.getElementById('q-nudge-example').textContent  = nudgeDef.example  || ''
+      document.getElementById('q-nudge-missing').textContent  = '→ ' + (nudgeDef.missing || '')
+      nudge.classList.add('show')
+      return // Don't advance — let them read the nudge first
+    }
+  }
+  // Save answer and advance
+  answers[q.id] = val
+  nudge.classList.remove('show')
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++
+    renderQuestion()
+    window.scrollTo(0,0)
+  } else {
+    finishAssessment()
+  }
+}
+
+function skipQuestion() {
+  var q = QUESTIONS[currentQ]
+  answers[q.id] = '(skipped)'
+  document.getElementById('q-nudge').classList.remove('show')
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++
+    renderQuestion()
+    window.scrollTo(0,0)
+  } else {
+    finishAssessment()
+  }
+}
+
+function prevQuestion() {
+  // Save current answer before going back
+  var q = QUESTIONS[currentQ]
+  var val = document.getElementById('q-answer').value.trim()
+  if (val) answers[q.id] = val
+  if (currentQ > 0) {
+    currentQ--
+    renderQuestion()
+  } else {
+    // Back to form
+    document.getElementById('page-questions').classList.remove('active')
+    document.getElementById('page-form').classList.add('active')
+  }
+  window.scrollTo(0,0)
+}
+
+// Enter key submits
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('page-questions').classList.contains('active')) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      var btn = document.getElementById('q-next-btn')
+      if (!btn.disabled) nextQuestion()
+    }
+  }
+})
+
+// ── Finish ─────────────────────────────────────────────────────────────────────
+function finishAssessment() {
+  // Save last answer
+  var q = QUESTIONS[currentQ]
+  var val = document.getElementById('q-answer').value.trim()
+  if (val) answers[q.id] = val
+  // Post full data to Make
+  var payload = { stage:'complete', intake:intake, answers:answers, timestamp:new Date().toISOString() }
+  if (MAKE_WEBHOOK_URL) {
+    fetch(MAKE_WEBHOOK_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){})
+  }
+  // Show done page
+  document.getElementById('done-name').textContent = intake.name.split(' ')[0]
+  document.getElementById('done-biz').textContent  = intake.business
+  document.getElementById('page-questions').classList.remove('active')
+  document.getElementById('page-done').classList.add('active')
+  window.scrollTo(0,0)
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────────
+buildSysRows()
+</script>
+</body>
+</html>
